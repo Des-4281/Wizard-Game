@@ -1,5 +1,9 @@
 ## STARTER CODE
 # Base Character class
+
+import random
+
+
 class Character:
     def __init__(self, name, health, attack_power):
         self.name = name
@@ -8,6 +12,12 @@ class Character:
         self.max_health = health  
 
     def attack(self, opponent):
+        self.attack_power = random.randint(
+                int(self.attack_power * 0.8),
+                int(self.attack_power * 1.2)
+        )
+    
+        
         opponent.health -= self.attack_power
         print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
         if opponent.health <= 0:
@@ -15,6 +25,11 @@ class Character:
 
     def display_stats(self):
         print(f"{self.name}'s Stats - Health: {self.health}/{self.max_health}, Attack Power: {self.attack_power}")
+    
+    def heal(self):
+        heal_amount = random.randint(15,30)
+        self.health = min(self.health + heal_amount, self.max_health)
+        print(f"{self.name} heals for {heal_amount} health! Current health: {self.health}/{self.max_health}")
 
 # Warrior class (inherits from Character)
 class Warrior(Character):
@@ -36,6 +51,19 @@ class EvilWizard(Character):
         print(f"{self.name} regenerates 5 health! Current health: {self.health}")
 
 # Create Archer class
+class Archer(Character): 
+    def __init__ (self, name):
+        super(). __init__(name, health=120, attack_power=30)
+        self.range = False # Archer has a special evade ability that allows them to create distance from the opponent, increasing the chance of a missed attack
+
+    def two_arrows(self, opponent):
+        print (f"{self.name} shoots using Two Arrows!")
+        self.attack(opponent)
+        self.attack(opponent)
+
+    def.range(self, opponent):
+        self.range = True
+        print(f'{self.name} uses Range and prepares to evade the next attack by taking distance!')
 
 # Create Paladin class 
 
