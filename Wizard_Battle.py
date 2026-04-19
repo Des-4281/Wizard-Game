@@ -66,7 +66,10 @@ class Archer(Character):
         print(f'{self.name} uses Range and prepares to evade the next attack by taking distance!')
 
 # Create Paladin class 
-
+    class Paladin(Character):
+        def __init__ (self, name):
+            super(). __init__(name, health=160, attack_power=20)
+            self.shielded = False # Shielded allows the player to reduce incoming damage by 30% for the next turn. 
 
 
 def create_character():
