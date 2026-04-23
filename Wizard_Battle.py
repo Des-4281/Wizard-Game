@@ -12,14 +12,13 @@ class Character:
         self.max_health = health  
 
     def attack(self, opponent):
-        self.attack_power = random.randint(
+        damage = random.randint(
                 int(self.attack_power * 0.8),
                 int(self.attack_power * 1.2)
         )
     
-        
-        opponent.health -= self.attack_power
-        print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
+        opponent.health -= damage
+        print(f"{self.name} attacks {opponent.name} for {damage} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
 
@@ -80,7 +79,7 @@ class Paladin(Character):
 
         def plasma_magic_shield(self):
             self.shielded = True
-            print (f"{self.name} uses Plasma Magic Shield! Next attack will be blocksed!")   
+            print (f"{self.name} uses Plasma Magic Shield! Next attack will be blocked!")   
 
 def create_character():
     print("Choose your character class:")
@@ -106,10 +105,12 @@ def create_character():
 
 def display_battle_status(player, wizard):
     def hp_bar(health, max_health):
+        length = 10
         current = max(0, health)
         filled = int((current / max_health) * length)
         empty = length - filled
-        return bar = '█' * filled + '░' * empty    
+        bar = '█' * filled + '░' * empty
+        return bar
         
     print("\n" + "=" * 50)
     print(f" 🧙 {wizard.name:<20} HP: [{hp_bar(wizard.health, wizard.max_health)}] {max(0, wizard.health)}/{wizard.max_health}")
@@ -160,27 +161,21 @@ def battle(player, wizard):
         else:
             print("Invalid choice. Try again.")
 
+    # Wizard's turn
         if wizard.health > 0:
             wizard.regenerate()
-            wizard.attack(player)
+            if hasattr(player, 'shielded') and player.shielded:
+                print(f"{player.name}'s Plasma Magic Shield absorbs the attack!")
+                player.shielded = False
+            elif hasattr(player, 'evading') and player.evading:
+                print(f"{player.name} evades the attack!")
+                player.evading = False
+            else:
+                wizard.attack(player)
 
         if player.health <= 0:
-            print(f"{player.name} has been defeated!")
+            print(f"Oh no, {player.name} has been defeated!\nThe Wizard says: 'I will rule the world for all the days! HAHAHA!'")
             break
-    if wizard.health > 0:
-        wizard.regenerate()
-        if hasattr(player, 'shielded') and player.shielded:
-            print(f"The {player.name}'s Plasma Magic Shield absorbs the attack!")
-            player.shielded = False  # Reset shield after use
-
-        if hasattr(player, 'evading') and player.evading:
-            print(f"The {player.name} evades the attack with Range!")
-            player.evading = False  # Reset range after use
-        else: 
-            wizard.attack(player)
-
-    if player.health <= 0:
-        print(f"Oh no, The {player.name} has been defeated! \nThe Wizard says: 'I will rule the world for all the days! As I have defeated you so easily! HAHAHA!")
 
     if wizard.health <= 0:
         print(f"The wizard {wizard.name} has been defeated by {player.name}!")
