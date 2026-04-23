@@ -114,7 +114,7 @@ def display_battle_status(player, wizard):
         
     print("\n" + "=" * 50)
     print(f" 🧙 {wizard.name:<20} HP: [{hp_bar(wizard.health, wizard.max_health)}] {max(0, wizard.health)}/{wizard.max_health}")
-    print(f" ⚔️ {player.name:<20} HP: [{hp_bar(player.health, player.max_health)}] {max(0, player.health)}/{player.max_health}")
+    print(f" ⚔️  {player.name:<20} HP: [{hp_bar(player.health, player.max_health)}] {max(0, player.health)}/{player.max_health}")
     print("=" * 50)
 
 def battle(player, wizard):
@@ -135,10 +135,14 @@ def battle(player, wizard):
                 damage = player.attack_power * 2
                 wizard.health -= damage
                 print(f"{player.name} uses Power Strike for {damage} damage!")
+                if wizard.health <= 0:
+                    print(f"{wizard.name} has been defeated!")
             elif isinstance(player, Mage):
                 damage = random.randint(40, 60)
                 wizard.health -= damage
                 print(f"{player.name} casts Fireball for {damage} damage!")
+                if wizard.health <= 0:
+                    print(f"{wizard.name} has been defeated!")
 
             elif isinstance(player, Archer):
                 print("1. Two Arrows 2. Range")
@@ -173,12 +177,13 @@ def battle(player, wizard):
             else:
                 wizard.attack(player)
 
+        if wizard.health <= 0:
+            print(f"\nCongratulations! {player.name} has defeated {wizard.name}!")
+            break
+
         if player.health <= 0:
             print(f"Oh no, {player.name} has been defeated!\nThe Wizard says: 'I will rule the world for all the days! HAHAHA!'")
             break
-
-    if wizard.health <= 0:
-        print(f"The wizard {wizard.name} has been defeated by {player.name}!")
 
 def main():
     player = create_character()
